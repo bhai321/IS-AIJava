@@ -1,0 +1,127 @@
+package TranspositionAlgo;
+
+	import java.util.*;
+	class RailFence {
+
+		String Encryption(String plain, int key) {
+			String encryptedText = "";
+			int col = plain.length();
+			int row = key;
+			boolean check = false;
+			int j = 0;
+			char[][] rail = new char[row][col];
+
+			// to fill the array:
+			for (int i = 0; i < row; i++) {
+
+				for (int k = 0; k < col; k++) {
+					rail[i][k] = '*';
+				}
+			}
+
+			for (int i = 0; i < col; i++) {
+				if (j == 0 || j == key - 1) {
+					check = !check;
+				}
+				rail[j][i] = plain.charAt(i);
+
+				if (check) {
+					j++;
+				} else {
+					j--;
+				}
+			}
+
+			System.out.println("Rail of encryption : ");
+			for (int i = 0; i < row; i++) {
+				for (int k = 0; k < col; k++) {
+					char ch = rail[i][k];
+					if (ch != '*')
+						encryptedText += rail[i][k];
+					System.out.print(ch + " ");
+				}
+				System.out.println();
+			}
+			return encryptedText;
+		}
+
+		String Decryption(String encrypted, int key) {
+			String decryptedText = "";
+
+			int col = encrypted.length();
+			int row = key;
+			boolean check = false;
+			int j = 0;
+			char[][] rail = new char[row][col];
+
+			// to fill the array:
+			for (int i = 0; i < row; i++) {
+				for (int k = 0; k < col; k++)
+					rail[i][k] = '*';
+			}
+
+			for (int i = 0; i < col; i++) {
+				if (j == 0 || j == key - 1)
+					check = !check;
+				rail[j][i] = '#';
+
+				if (check) {
+					j++;
+				} else {
+					j--;
+				}
+			}
+
+			System.out.println("Rails for decryption : ");
+			int index = 0;
+			for (int i = 0; i < row; i++) {
+				for (int k = 0; k < col; k++) {
+					char ch = rail[i][k];
+					if (ch == '#' && index < col) {
+						rail[i][k] = encrypted.charAt(index++);
+					}
+					System.out.print(rail[i][k]+ " ");
+				}
+				System.out.println();
+			}
+
+			j = 0;
+			check = false;
+			for (int i = 0; i < col; i++) {
+				if (j == 0 || j == key - 1)
+					check = !check;
+				decryptedText += rail[j][i];
+
+				if (check)
+					j++;
+				else
+					j--;
+			}
+
+			return decryptedText;
+		}
+
+	}
+	public class RailFenceMain {
+		public static void main(String args[])throws Exception
+		 {
+		                RailFence rf=new RailFence();
+		                Scanner scn=new Scanner(System.in);
+		                int key;
+		                String plainText,cipherText,decryptedText;
+		                
+		                System.out.println("Enter plain text:");
+		                plainText=scn.nextLine();
+		                
+		                //remove the white spaces
+		                String str1 = plainText.replaceAll("\\s", "");  
+		              	System.out.println("Enter Rail Size for Encryption:");
+		                key=scn.nextInt();   
+		                cipherText=rf.Encryption(str1,key);
+		                System.out.println("Encrypted text is:\n"+cipherText);
+		                
+		                String str2 = cipherText.replaceAll("\\s", "");    
+		                decryptedText=rf.Decryption(str2,key);
+		                System.out.println("Decrypted text is:\n"+decryptedText);
+		 }
+	}
